@@ -1,17 +1,20 @@
 package com.jaac.pdf.property;
 
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 
 public class ImageProperty extends BaseProperty {
     private final Float width;
     private final Float height;
     private final HorizontalAlignment alignment;
+    private final Border border;
 
     private ImageProperty(Builder builder) {
         super(builder);
         this.width = builder.width;
         this.height = builder.height;
         this.alignment = builder.alignment;
+        this.border = builder.border;
     }
 
     public static Builder builder() {
@@ -22,6 +25,7 @@ public class ImageProperty extends BaseProperty {
         private Float width;
         private Float height;
         private HorizontalAlignment alignment;
+        private Border border;
 
         private Builder() {
             super();
@@ -38,6 +42,11 @@ public class ImageProperty extends BaseProperty {
             return this;
         }
 
+        public Builder border(Border border) {
+            this.border = border;
+            return this;
+        }
+
         public ImageProperty build() {
             return new ImageProperty(this);
         }
@@ -48,4 +57,6 @@ public class ImageProperty extends BaseProperty {
     public float getHeight() {return height;}
 
     public HorizontalAlignment getAlignment() {return alignment;}
+
+    public Border getBorder() {return border;}
 }

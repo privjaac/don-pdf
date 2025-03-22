@@ -1,5 +1,6 @@
 package com.jaac.pdf.loader;
 
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 
@@ -11,7 +12,7 @@ public class FontLoader extends ResourceLoader {
     }
 
     public PdfFont loadPdfFont() throws IOException {
-        return loadPdfFont("UTF-8", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+        return loadPdfFont(PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
     }
 
     public PdfFont loadPdfFont(String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) throws IOException {

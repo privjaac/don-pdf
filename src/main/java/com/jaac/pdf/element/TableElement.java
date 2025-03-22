@@ -1,11 +1,12 @@
 package com.jaac.pdf.element;
 
-import com.jaac.pdf.property.TableProperty;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Table;
+import com.jaac.pdf.property.TableProperty;
 
-import java.util.Optional;
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 public class TableElement implements Element {
     private final Table table;
@@ -18,15 +19,20 @@ public class TableElement implements Element {
 
     @Override
     public void addToDocument(Document document, PdfFont defaultFont, Float defaultFontSize) {
-        if (defaultFont != null) table.setFont(Optional.ofNullable(property.getFont()).orElse(defaultFont));
-        if (defaultFontSize != null) table.setFontSize(Optional.ofNullable(property.getFontSize()).filter(size -> size > 0).orElse(defaultFontSize));
-        if (property.getWidth() > 0) table.setWidth(property.getWidth());
-        if (property.getAlignment() != null) table.setHorizontalAlignment(property.getAlignment());
-        if (property.getBorder() != null) table.setBorder(property.getBorder());
-        if (property.getMarginTop() != null) table.setMarginTop(property.getMarginTop());
-        if (property.getMarginBottom() != null) table.setMarginBottom(property.getMarginBottom());
-        if (property.getMarginRight() != null) table.setMarginRight(property.getMarginRight());
-        if (property.getMarginLeft() != null) table.setMarginLeft(property.getMarginLeft());
+        ofNullable(defaultFont)
+                .or(() -> ofNullable(property.getFont()))
+                .ifPresent(table::setFont);
+        ofNullable(defaultFontSize)
+                .filter(size -> size > 0)
+                .or(() -> ofNullable(property.getFontSize()).filter(size -> size > 0))
+                .ifPresent(table::setFontSize);
+        of(property.getWidth()).filter(width -> width > 0).ifPresent(table::setWidth);
+        ofNullable(property.getAlignment()).ifPresent(table::setHorizontalAlignment);
+        ofNullable(property.getBorder()).ifPresent(table::setBorder);
+        ofNullable(property.getMarginTop()).ifPresent(table::setMarginTop);
+        ofNullable(property.getMarginBottom()).ifPresent(table::setMarginBottom);
+        ofNullable(property.getMarginRight()).ifPresent(table::setMarginRight);
+        ofNullable(property.getMarginLeft()).ifPresent(table::setMarginLeft);
         document.add(table);
     }
 }

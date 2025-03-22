@@ -34,23 +34,18 @@ public class BackgroundImageLoader extends ResourceLoader {
     private byte[] convertWebPToPNG(byte[] webpData) throws IOException {
         File tempWebP = File.createTempFile(TEMP_PREFIX, WEBP_EXTENSION);
         File tempPNG = File.createTempFile(TEMP_PREFIX, PNG_EXTENSION);
-
         try {
             Files.write(tempWebP.toPath(), webpData);
             Mat mat = imread(tempWebP.getAbsolutePath());
-            if (mat.empty()) {
-                throw new IOException("Failed to read WebP image");
-            }
-
+            if (mat.empty()) throw new IOException("Failed to read WebP image");
             OpenCVFrameConverter.ToMat converterToMat = new OpenCVFrameConverter.ToMat();
             Java2DFrameConverter converterToAWT = new Java2DFrameConverter();
             BufferedImage bufferedImage = converterToAWT.convert(converterToMat.convert(mat));
-
             ImageIO.write(bufferedImage, "PNG", tempPNG);
             return Files.readAllBytes(tempPNG.toPath());
         } finally {
-            tempWebP.delete();
-            tempPNG.delete();
+            Files.delete(tempWebP.toPath());
+            Files.delete(tempPNG.toPath());
         }
     }
 }

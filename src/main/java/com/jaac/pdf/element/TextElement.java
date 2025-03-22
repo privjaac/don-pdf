@@ -5,7 +5,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.jaac.pdf.property.TextProperty;
 
-import java.util.Optional;
+import static java.util.Optional.ofNullable;
 
 public class TextElement implements Element {
     private final String text;
@@ -20,15 +20,20 @@ public class TextElement implements Element {
     public void addToDocument(Document document, PdfFont defaultFont, Float defaultFontSize) {
         try {
             Paragraph paragraph = new Paragraph(text);
-            if (defaultFont != null) paragraph.setFont(Optional.ofNullable(property.getFont()).orElse(defaultFont));
-            if (defaultFontSize != null) paragraph.setFontSize(Optional.ofNullable(property.getFontSize()).filter(size -> size > 0).orElse(defaultFontSize));
-            if (property.getColor() != null) paragraph.setFontColor(property.getColor());
-            if (property.getAlignment() != null) paragraph.setTextAlignment(property.getAlignment());
-            if (property.getBorder() != null) paragraph.setBorder(property.getBorder());
-            if (property.getMarginTop() != null) paragraph.setMarginTop(property.getMarginTop());
-            if (property.getBorder() != null) paragraph.setMarginBottom(property.getMarginBottom());
-            if (property.getBorder() != null) paragraph.setMarginRight(property.getMarginRight());
-            if (property.getBorder() != null) paragraph.setMarginLeft(property.getMarginLeft());
+            ofNullable(defaultFont)
+                    .or(() -> ofNullable(property.getFont()))
+                    .ifPresent(paragraph::setFont);
+            ofNullable(defaultFontSize)
+                    .filter(size -> size > 0)
+                    .or(() -> ofNullable(property.getFontSize()).filter(size -> size > 0))
+                    .ifPresent(paragraph::setFontSize);
+            ofNullable(property.getColor()).ifPresent(paragraph::setFontColor);
+            ofNullable(property.getAlignment()).ifPresent(paragraph::setTextAlignment);
+            ofNullable(property.getBorder()).ifPresent(paragraph::setBorder);
+            ofNullable(property.getMarginTop()).ifPresent(paragraph::setMarginTop);
+            ofNullable(property.getMarginBottom()).ifPresent(paragraph::setMarginBottom);
+            ofNullable(property.getMarginRight()).ifPresent(paragraph::setMarginRight);
+            ofNullable(property.getMarginLeft()).ifPresent(paragraph::setMarginLeft);
             document.add(paragraph);
         } catch (Exception e) {
             throw new RuntimeException("Error al añadir texto al documento", e);

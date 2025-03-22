@@ -1,7 +1,5 @@
 package com.jaac.pdf.builder;
 
-import com.jaac.pdf.loader.FontLoader;
-import com.jaac.pdf.parser.ColorParser;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -9,6 +7,8 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.jaac.pdf.loader.FontLoader;
+import com.jaac.pdf.parser.ColorParser;
 
 import java.io.IOException;
 
@@ -21,6 +21,8 @@ public class CellBuilder {
     private Color backgroundColor;
     private TextAlignment alignment;
     private Border border;
+    private Integer colspan = 1;
+    private Integer rowspan = 1;
 
     public CellBuilder(RowBuilder parent) {
         this.parent = parent;
@@ -51,6 +53,11 @@ public class CellBuilder {
         return this;
     }
 
+    public CellBuilder color(Color color) {
+        this.color = color;
+        return this;
+    }
+
     public CellBuilder color(String color) {
         this.color = ColorParser.parse(color);
         return this;
@@ -61,6 +68,11 @@ public class CellBuilder {
         validateRGBValue(g, "Green");
         validateRGBValue(b, "Blue");
         this.color = new DeviceRgb(r, g, b);
+        return this;
+    }
+
+    public CellBuilder background(Color color) {
+        this.backgroundColor = color;
         return this;
     }
 
@@ -112,6 +124,16 @@ public class CellBuilder {
         return this;
     }
 
+    public CellBuilder colspan(Integer colspan) {
+        this.colspan = colspan;
+        return this;
+    }
+
+    public CellBuilder rowspan(Integer rowspan) {
+        this.rowspan = rowspan;
+        return this;
+    }
+
     public CellBuilder addCell() {
         return parent.addCell();
     }
@@ -125,7 +147,8 @@ public class CellBuilder {
         if (font != null) paragraph.setFont(font);
         if (fontSize != null) paragraph.setFontSize(fontSize);
         if (color != null) paragraph.setFontColor(color);
-        Cell cell = new Cell().add(paragraph);
+        Cell cell = new Cell(rowspan, colspan);
+        cell.add(paragraph);
         if (backgroundColor != null) cell.setBackgroundColor(backgroundColor);
         if (alignment != null) cell.setTextAlignment(alignment);
         if (border != null) cell.setBorder(border);
@@ -133,8 +156,6 @@ public class CellBuilder {
     }
 
     private void validateRGBValue(int value, String colorName) {
-        if (value < 0 || value > 255) {
-            throw new IllegalArgumentException(String.format("%s value must be between 0 and 255, got: %d", colorName, value));
-        }
+        if (value < 0 || value > 255) throw new IllegalArgumentException(String.format("%s value must be between 0 and 255, got: %d", colorName, value));
     }
 }

@@ -1,9 +1,10 @@
 package com.jaac.pdf.builder;
 
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.jaac.pdf.element.ImageElement;
 import com.jaac.pdf.main.DonPdf;
 import com.jaac.pdf.property.ImageProperty;
-import com.itextpdf.layout.properties.HorizontalAlignment;
 
 public class ImageBuilder {
     private final DonPdf parent;
@@ -15,6 +16,7 @@ public class ImageBuilder {
     private float marginRight;
     private float marginBottom;
     private float marginLeft;
+    private Border border;
 
     public ImageBuilder(DonPdf parent) {
         this.parent = parent;
@@ -36,11 +38,31 @@ public class ImageBuilder {
         return this;
     }
 
+    public ImageBuilder alignmentLeft() {
+        this.alignment = HorizontalAlignment.LEFT;
+        return this;
+    }
+
+    public ImageBuilder alignmentCenter() {
+        this.alignment = HorizontalAlignment.CENTER;
+        return this;
+    }
+
+    public ImageBuilder alignmentRight() {
+        this.alignment = HorizontalAlignment.RIGHT;
+        return this;
+    }
+
     public ImageBuilder margins(float top, float right, float bottom, float left) {
         this.marginTop = top;
         this.marginRight = right;
         this.marginBottom = bottom;
         this.marginLeft = left;
+        return this;
+    }
+
+    public ImageBuilder border(Border border) {
+        this.border = border;
         return this;
     }
 
@@ -50,6 +72,7 @@ public class ImageBuilder {
                 .size(width, height)
                 .alignment(alignment)
                 .margins(marginTop, marginRight, marginBottom, marginLeft)
+                .border(border)
                 .build();
         parent.getElements().add(new ImageElement(path, properties));
         return parent;

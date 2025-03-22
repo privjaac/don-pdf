@@ -19,6 +19,8 @@ import com.jaac.pdf.utility.BackgroundUtility;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -143,7 +145,7 @@ public class DonPdf {
             createInitialDocument(tempInitialPath);
             mergeDocuments(tempInitialPath);
         } finally {
-            new File(tempInitialPath).delete();
+            Files.deleteIfExists(Path.of(tempInitialPath));
         }
     }
 
@@ -191,7 +193,7 @@ public class DonPdf {
     }
 
     private PdfFont loadFont(String fontPath) throws IOException {
-        return loadFont(fontPath, "UTF-8", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+        return loadFont(fontPath, "Identity-H", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
     }
 
     private PdfFont loadFont(String fontPath, String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) throws IOException {

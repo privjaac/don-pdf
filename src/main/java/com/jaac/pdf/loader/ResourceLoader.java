@@ -17,24 +17,16 @@ public abstract class ResourceLoader {
 
     protected byte[] loadResource() throws IOException {
         // 1. Intentar cargar como URL
-        if (isUrl(resourcePath)) {
-            return loadFromUrl(new URL(resourcePath));
-        }
+        if (isUrl(resourcePath)) return loadFromUrl(new URL(resourcePath));
         // 2. Intentar cargar desde resources
         byte[] resourceData = loadFromResources();
-        if (resourceData != null) {
-            return resourceData;
-        }
+        if (resourceData != null) return resourceData;
         // 3. Intentar cargar como ruta absoluta o relativa
         Path path = Paths.get(resourcePath);
-        if (Files.exists(path)) {
-            return Files.readAllBytes(path);
-        }
+        if (Files.exists(path)) return Files.readAllBytes(path);
         // 4. Intentar cargar desde la carpeta resources del proyecto
         path = Paths.get("src", "main", "resources", resourcePath);
-        if (Files.exists(path)) {
-            return Files.readAllBytes(path);
-        }
+        if (Files.exists(path)) return Files.readAllBytes(path);
         throw new IOException("No se pudo encontrar el recurso: " + resourcePath);
     }
 
