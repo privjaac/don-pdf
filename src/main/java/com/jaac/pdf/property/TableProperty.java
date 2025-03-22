@@ -1,0 +1,73 @@
+package com.jaac.pdf.property;
+
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+
+public class TableProperty extends BaseProperty {
+    private final PdfFont font;
+    private final Float fontSize;
+    private final float width;
+    private final HorizontalAlignment alignment;
+    private final Border border;
+
+    private TableProperty(Builder builder) {
+        super(builder);
+        this.font = builder.font;
+        this.fontSize = builder.fontSize;
+        this.width = builder.width;
+        this.alignment = builder.alignment;
+        this.border = builder.border;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public PdfFont getFont() {return font;}
+
+    public Float getFontSize() {return fontSize;}
+
+    public float getWidth() {return width;}
+
+    public HorizontalAlignment getAlignment() {return alignment;}
+
+    public Border getBorder() {return border;}
+
+    public static class Builder extends BaseBuilder<Builder> {
+        private PdfFont font;
+        private Float fontSize;
+        private float width;
+        private HorizontalAlignment alignment;
+        private Border border;
+
+        public Builder font(PdfFont font) {
+            this.font = font;
+            return this;
+        }
+
+        public Builder fontSize(Float fontSize) {
+            this.fontSize = fontSize;
+            return this;
+        }
+
+        public Builder width(float width) {
+            this.width = width;
+            return this;
+        }
+
+        public Builder alignment(HorizontalAlignment alignment) {
+            this.alignment = alignment;
+            return this;
+        }
+
+        public Builder border(Border border) {
+            this.border = border;
+            return this;
+        }
+
+        public TableProperty build() {
+            return new TableProperty(this);
+        }
+    }
+}

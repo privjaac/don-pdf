@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.jaac.pdf'
+version = '0.0.1'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    loggingX
+}
+
+dependencies {
+    implementation ('com.itextpdf:itext-core:8.0.5')
+    implementation 'org.bytedeco:javacv-platform:1.5.11'
+    loggingX 'org.slf4j:slf4j-nop:1.7.36'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+configurations.implementation.extendsFrom(configurations.loggingX)
+
+
+test {
+    useJUnitPlatform()
+}
