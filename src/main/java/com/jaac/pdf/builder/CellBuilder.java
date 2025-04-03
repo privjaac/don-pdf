@@ -30,6 +30,7 @@ public class CellBuilder {
     private Float paddingRight;
     private Float paddingBottom;
     private Float paddingLeft;
+    private Float wordSpacing;
     private Integer colspan = 1;
     private Integer rowspan = 1;
 
@@ -158,6 +159,11 @@ public class CellBuilder {
         return this;
     }
 
+    public CellBuilder wordSpacing(Float wordSpacing) {
+        this.wordSpacing = wordSpacing;
+        return this;
+    }
+
     public CellBuilder paddingTop(Float paddingTop) {
         this.paddingTop = paddingTop;
         return this;
@@ -214,6 +220,7 @@ public class CellBuilder {
         if (paddingRight != null) cell.setPaddingRight(paddingRight);
         if (paddingBottom != null) cell.setPaddingBottom(paddingBottom);
         if (paddingLeft != null) cell.setPaddingLeft(paddingLeft);
+        if (wordSpacing != null) cell.setWordSpacing(wordSpacing);
         return cell;
     }
 
