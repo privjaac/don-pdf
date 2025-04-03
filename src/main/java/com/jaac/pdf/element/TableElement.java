@@ -33,6 +33,12 @@ public class TableElement implements Element {
         ofNullable(property.getMarginBottom()).ifPresent(table::setMarginBottom);
         ofNullable(property.getMarginRight()).ifPresent(table::setMarginRight);
         ofNullable(property.getMarginLeft()).ifPresent(table::setMarginLeft);
+        ofNullable(property.getPaddingTop()).ifPresent(table::setPaddingTop);
+        ofNullable(property.getPaddingBottom()).ifPresent(table::setPaddingBottom);
+        ofNullable(property.getPaddingRight()).ifPresent(table::setPaddingRight);
+        ofNullable(property.getPaddingLeft()).ifPresent(table::setPaddingLeft);
+        ofNullable(property.getBorderRadius()).ifPresent(table::setBorderRadius);
+        ofNullable(property.getBackgroundColor()).ifPresent(table::setBackgroundColor);
         document.add(table);
     }
 }

@@ -1,5 +1,7 @@
 package com.jaac.pdf.builder;
 
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.layout.properties.BorderRadius;
 import com.jaac.pdf.element.TableElement;
 import com.jaac.pdf.main.DonPdf;
 import com.jaac.pdf.property.TableProperty;
@@ -12,11 +14,17 @@ public class TableBuilder {
     private final Table table;
     private float width;
     private HorizontalAlignment alignment;
+    private Color backgroundColor;
     private Border border;
+    private BorderRadius borderRadius;
     private float marginTop;
     private float marginRight;
     private float marginBottom;
     private float marginLeft;
+    private float paddingTop;
+    private float paddingRight;
+    private float paddingBottom;
+    private float paddingLeft;
     private RowBuilder currentRow;
 
     public TableBuilder(DonPdf parent, float... columnWidths) {
@@ -48,6 +56,24 @@ public class TableBuilder {
         return this;
     }
 
+    public TableBuilder paddings(float top, float right, float bottom, float left) {
+        this.paddingTop = top;
+        this.paddingRight = right;
+        this.paddingBottom = bottom;
+        this.paddingLeft = left;
+        return this;
+    }
+
+    public TableBuilder borderRadius(BorderRadius borderRadius) {
+        this.borderRadius = borderRadius;
+        return this;
+    }
+
+    public TableBuilder backgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
     public RowBuilder addRow() {
         if (currentRow != null && !currentRow.isEmpty()) currentRow.addToTable();
         currentRow = new RowBuilder(this);
@@ -60,7 +86,10 @@ public class TableBuilder {
                 .width(width)
                 .alignment(alignment)
                 .margins(marginTop, marginRight, marginBottom, marginLeft)
+                .paddings(paddingTop, paddingRight, paddingBottom, paddingLeft)
                 .border(border)
+                .borderRadius(borderRadius)
+                .backgroundColor(backgroundColor)
                 .build();
         parent.getElements().add(new TableElement(table, properties));
         return parent;

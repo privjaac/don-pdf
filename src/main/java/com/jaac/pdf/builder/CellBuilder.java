@@ -6,6 +6,7 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.BorderRadius;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.jaac.pdf.loader.FontLoader;
 import com.jaac.pdf.parser.ColorParser;
@@ -18,9 +19,17 @@ public class CellBuilder {
     private PdfFont font;
     private Float fontSize;
     private Color color;
+    private Boolean bold;
+    private Boolean italic;
+    private Boolean underline;
     private Color backgroundColor;
     private TextAlignment alignment;
     private Border border;
+    private BorderRadius borderRadius;
+    private Float paddingTop;
+    private Float paddingRight;
+    private Float paddingBottom;
+    private Float paddingLeft;
     private Integer colspan = 1;
     private Integer rowspan = 1;
 
@@ -124,6 +133,51 @@ public class CellBuilder {
         return this;
     }
 
+    public CellBuilder borderRadius(BorderRadius borderRadius) {
+        this.borderRadius = borderRadius;
+        return this;
+    }
+
+    public CellBuilder bold() {
+        this.bold = true;
+        return this;
+    }
+
+    public CellBuilder bold(Boolean isBold) {
+        this.bold = isBold;
+        return this;
+    }
+
+    public CellBuilder italic() {
+        this.italic = true;
+        return this;
+    }
+
+    public CellBuilder underline() {
+        this.underline = true;
+        return this;
+    }
+
+    public CellBuilder paddingTop(Float paddingTop) {
+        this.paddingTop = paddingTop;
+        return this;
+    }
+
+    public CellBuilder paddingRight(Float paddingRight) {
+        this.paddingRight = paddingRight;
+        return this;
+    }
+
+    public CellBuilder paddingBottom(Float paddingBottom) {
+        this.paddingBottom = paddingBottom;
+        return this;
+    }
+
+    public CellBuilder paddingLeft(Float paddingLeft) {
+        this.paddingLeft = paddingLeft;
+        return this;
+    }
+
     public CellBuilder colspan(Integer colspan) {
         this.colspan = colspan;
         return this;
@@ -152,6 +206,14 @@ public class CellBuilder {
         if (backgroundColor != null) cell.setBackgroundColor(backgroundColor);
         if (alignment != null) cell.setTextAlignment(alignment);
         if (border != null) cell.setBorder(border);
+        if (borderRadius != null) cell.setBorderRadius(borderRadius);
+        if (bold != null && bold) cell.setBold();
+        if (italic != null && italic) cell.setItalic();
+        if (underline != null && underline) cell.setUnderline();
+        if (paddingTop != null) cell.setPaddingTop(paddingTop);
+        if (paddingRight != null) cell.setPaddingRight(paddingRight);
+        if (paddingBottom != null) cell.setPaddingBottom(paddingBottom);
+        if (paddingLeft != null) cell.setPaddingLeft(paddingLeft);
         return cell;
     }
 

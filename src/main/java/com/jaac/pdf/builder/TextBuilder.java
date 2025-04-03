@@ -2,11 +2,9 @@ package com.jaac.pdf.builder;
 
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.jaac.pdf.fragment.TextFragment;
 import com.jaac.pdf.element.TextElement;
 import com.jaac.pdf.loader.FontLoader;
 import com.jaac.pdf.main.DonPdf;
@@ -14,90 +12,82 @@ import com.jaac.pdf.parser.ColorParser;
 import com.jaac.pdf.property.TextProperty;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextBuilder {
     private final DonPdf parent;
-    private String content;
-    private PdfFont font;
-    private Float fontSize;
-    private Color color;
     private TextAlignment alignment;
     private Border border;
     private Float marginTop;
     private Float marginRight;
     private Float marginBottom;
     private Float marginLeft;
-    private Boolean bold;
-    private Boolean italic;
-    private Boolean underline;
-    private Float wordSpacing;
-    private String hyperlinkUrl;
-    private Boolean inlineMode;
-    private Paragraph inlineParagraph;
-    private Text lastTextElement;
-
+    private List<TextFragment> fragments;
+    private PdfFont currentFont;
+    private Float currentFontSize;
+    private Color currentColor;
+    private Boolean currentBold;
+    private Boolean currentItalic;
+    private Boolean currentUnderline;
+    private Float currentWordSpacing;
+    private String currentHyperlinkUrl;
 
     public TextBuilder(DonPdf parent) {
-        this(parent, false);
-    }
-
-    public TextBuilder(DonPdf parent, Boolean inlineMode) {
         this.parent = parent;
-        this.inlineMode = inlineMode;
-        if (inlineMode) {
-            this.inlineParagraph = new Paragraph();
-            this.lastTextElement = null;
-        }
-    }
-
-    public TextBuilder newline() {
-        this.inlineMode = true;
-        this.inlineParagraph = new Paragraph();
-        this.lastTextElement = null;
-        return this;
+        this.fragments = new ArrayList<>();
     }
 
     public TextBuilder content(String text) {
-        if (inlineMode) {
-            Text textElement = new Text(text);
-            this.lastTextElement = textElement;
-            inlineParagraph.add(textElement);
-        } else this.content = text;
+        applyCurrentPropertiesToLastFragment();
+        TextFragment fragment = new TextFragment(text);
+        fragments.add(fragment);
         return this;
     }
 
+    private void applyCurrentPropertiesToLastFragment() {
+        if (!fragments.isEmpty()) {
+            TextFragment lastFragment = fragments.getLast();
+            TextProperty.Builder builder = TextProperty.builder()
+                    .font(currentFont)
+                    .fontSize(currentFontSize)
+                    .color(currentColor)
+                    .isBold(currentBold)
+                    .isItalic(currentItalic)
+                    .isUnderline(currentUnderline)
+                    .wordSpacing(currentWordSpacing)
+                    .hyperlinkUrl(currentHyperlinkUrl);
+            lastFragment.setProperties(builder.build());
+        }
+    }
+
     public TextBuilder font(PdfFont font) {
-        this.font = font;
-        if (inlineMode && lastTextElement != null) lastTextElement.setFont(font);
+        this.currentFont = font;
         return this;
     }
 
     public TextBuilder font(String fontPath) {
         try {
             FontLoader loader = new FontLoader(fontPath);
-            this.font = loader.loadPdfFont();
-            if (inlineMode && lastTextElement != null) lastTextElement.setFont(this.font);
+            this.currentFont = loader.loadPdfFont();
         } catch (IOException e) {
             throw new RuntimeException("Error loading font: " + fontPath, e);
         }
         return this;
     }
 
-    public TextBuilder fontSize(float size) {
-        this.fontSize = size;
-        if (inlineMode && lastTextElement != null) lastTextElement.setFontSize(size);
+    public TextBuilder fontSize(Float size) {
+        this.currentFontSize = size;
         return this;
     }
 
     public TextBuilder color(Color color) {
-        this.color = color;
-        if (inlineMode && lastTextElement != null) lastTextElement.setFontColor(color);
+        this.currentColor = color;
         return this;
     }
 
     public TextBuilder color(String color) {
-        this.color = ColorParser.parse(color);
-        if (inlineMode && lastTextElement != null) lastTextElement.setFontColor(this.color);
+        this.currentColor = ColorParser.parse(color);
         return this;
     }
 
@@ -145,66 +135,62 @@ public class TextBuilder {
     }
 
     public TextBuilder bold() {
-        this.bold = true;
-        if (inlineMode && lastTextElement != null) lastTextElement.setBold();
+        this.currentBold = true;
         return this;
     }
 
     public TextBuilder bold(Boolean isBold) {
-        this.bold = isBold;
-        if (this.bold && inlineMode && lastTextElement != null) lastTextElement.setBold();
+        this.currentBold = isBold;
         return this;
     }
 
     public TextBuilder italic() {
-        this.italic = true;
-        if (inlineMode && lastTextElement != null) lastTextElement.setItalic();
+        this.currentItalic = true;
         return this;
     }
 
     public TextBuilder underline() {
-        this.underline = true;
-        if (inlineMode && lastTextElement != null) lastTextElement.setUnderline();
+        this.currentUnderline = true;
         return this;
     }
 
     public TextBuilder wordSpacing(float wordSpacing) {
-        this.wordSpacing = wordSpacing;
-        if (inlineMode && lastTextElement != null) lastTextElement.setWordSpacing(wordSpacing);
+        this.currentWordSpacing = wordSpacing;
         return this;
     }
 
     public TextBuilder hyperlink(String url) {
-        this.hyperlinkUrl = url;
-        if (inlineMode && lastTextElement != null) {
-            PdfAction linkAction = PdfAction.createURI(url);
-            lastTextElement.setAction(linkAction);
-        }
+        this.currentHyperlinkUrl = url;
         return this;
     }
 
     public DonPdf next() {
-        TextProperty properties = TextProperty
-                .builder()
-                .font(font)
-                .fontSize(fontSize)
-                .color(color)
+        applyCurrentPropertiesToLastFragment();
+        TextProperty paragraphProperties = TextProperty.builder()
                 .alignment(alignment)
                 .border(border)
                 .margins(marginTop, marginRight, marginBottom, marginLeft)
-                .isBold(bold)
-                .isItalic(italic)
-                .isUnderline(underline)
-                .wordSpacing(wordSpacing)
-                .hyperlinkUrl(hyperlinkUrl)
                 .build();
-        if (inlineMode) parent.getElements().add(new TextElement(inlineParagraph, properties));
-        else parent.getElements().add(new TextElement(content, properties));
-        this.bold = null;
-        this.italic = null;
-        this.underline = null;
-        this.wordSpacing = null;
-        this.hyperlinkUrl = null;
+        parent.getElements().add(new TextElement(fragments, paragraphProperties));
+        resetBuilder();
         return parent;
+    }
+
+    private void resetBuilder() {
+        this.alignment = null;
+        this.border = null;
+        this.marginTop = null;
+        this.marginRight = null;
+        this.marginBottom = null;
+        this.marginLeft = null;
+        this.currentFont = null;
+        this.currentFontSize = null;
+        this.currentColor = null;
+        this.currentBold = null;
+        this.currentItalic = null;
+        this.currentUnderline = null;
+        this.currentWordSpacing = null;
+        this.currentHyperlinkUrl = null;
+        this.fragments = new ArrayList<>();
     }
 }

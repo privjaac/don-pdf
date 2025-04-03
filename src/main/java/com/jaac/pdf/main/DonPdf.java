@@ -55,10 +55,6 @@ public class DonPdf {
         return new TextBuilder(this);
     }
 
-    public TextBuilder addText(boolean inlineMode) {
-        return new TextBuilder(this, inlineMode);
-    }
-
     public TableBuilder addTable(float... columnWidths) {
         return new TableBuilder(this, columnWidths);
     }
