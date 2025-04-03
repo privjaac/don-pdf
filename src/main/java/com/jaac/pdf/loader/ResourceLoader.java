@@ -1,5 +1,7 @@
 package com.jaac.pdf.loader;
 
+import com.jaac.pdf.cache.UrlCache;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -17,7 +19,7 @@ public abstract class ResourceLoader {
 
     protected byte[] loadResource() throws IOException {
         // 1. Intentar cargar como URL
-        if (isUrl(resourcePath)) return loadFromUrl(new URL(resourcePath));
+        if (isUrl(resourcePath)) return loadFromUrl(resourcePath);
         // 2. Intentar cargar desde resources
         byte[] resourceData = loadFromResources();
         if (resourceData != null) return resourceData;
@@ -39,10 +41,14 @@ public abstract class ResourceLoader {
         }
     }
 
-    private byte[] loadFromUrl(URL url) throws IOException {
-        try (InputStream in = url.openStream()) {
-            return in.readAllBytes();
-        }
+//    private byte[] loadFromUrl(URL url) throws IOException {
+//        try (InputStream in = url.openStream()) {
+//            return in.readAllBytes();
+//        }
+//    }
+
+    private byte[] loadFromUrl(String urlStr) throws IOException {
+        return UrlCache.getInstance().getResource(urlStr);
     }
 
     private byte[] loadFromResources() {
