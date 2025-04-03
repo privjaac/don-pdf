@@ -11,14 +11,24 @@ public class TextProperty extends BaseProperty {
     private final Color color;
     private final TextAlignment alignment;
     private final Border border;
+    private final Boolean isBold;
+    private final Boolean isItalic;
+    private final Boolean isUnderlined;
+    private final Float wordSpacing;
+    private final String hyperlinkUrl;
 
-    private TextProperty(Builder builder) {
+    public TextProperty(Builder builder) {
         super(builder);
         this.font = builder.font;
         this.fontSize = builder.fontSize;
         this.color = builder.color;
         this.alignment = builder.alignment;
         this.border = builder.border;
+        this.isBold = builder.isBold;
+        this.isItalic = builder.isItalic;
+        this.isUnderlined = builder.isUnderline;
+        this.wordSpacing = builder.wordSpacing;
+        this.hyperlinkUrl = builder.hyperlinkUrl;
     }
 
     public static Builder builder() {
@@ -35,12 +45,27 @@ public class TextProperty extends BaseProperty {
 
     public Border getBorder() {return border;}
 
+    public Boolean getIsBold() {return isBold;}
+
+    public Boolean getIsUnderlined() {return isUnderlined;}
+
+    public Boolean getIsItalic() {return isItalic;}
+
+    public Float getWordSpacing() {return wordSpacing;}
+
+    public String getHyperlinkUrl() {return hyperlinkUrl;}
+
     public static class Builder extends BaseBuilder<Builder> {
         private PdfFont font;
         private Float fontSize;
         private Color color;
         private TextAlignment alignment;
         private Border border;
+        private Boolean isBold;
+        private Boolean isItalic;
+        private Boolean isUnderline;
+        private Float wordSpacing;
+        private String hyperlinkUrl;
 
         private Builder() {
             super();
@@ -68,6 +93,31 @@ public class TextProperty extends BaseProperty {
 
         public Builder border(Border border) {
             this.border = border;
+            return this;
+        }
+
+        public Builder isBold(Boolean isBold) {
+            this.isBold = isBold;
+            return this;
+        }
+
+        public Builder isItalic(Boolean isItalic) {
+            this.isItalic = isItalic;
+            return this;
+        }
+
+        public Builder isUnderline(Boolean isUnderline) {
+            this.isUnderline = isUnderline;
+            return this;
+        }
+
+        public Builder wordSpacing(Float wordSpacing) {
+            this.wordSpacing = wordSpacing;
+            return this;
+        }
+
+        public Builder hyperlinkUrl(String hyperlinkUrl) {
+            this.hyperlinkUrl = hyperlinkUrl;
             return this;
         }
 
