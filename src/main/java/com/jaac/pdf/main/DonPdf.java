@@ -40,6 +40,7 @@ public class DonPdf {
         this.config.setPageSize(PageSize.A4);
         this.config.setDefaultFontSize(DEFAULT_FONT_SIZE);
         this.config.setBackgroundOpacity(1.0f);
+        this.config.setMargins(0, 0, 0, 0);
     }
 
     public static DonPdf builder() {
@@ -52,6 +53,10 @@ public class DonPdf {
 
     public TextBuilder addText() {
         return new TextBuilder(this);
+    }
+
+    public TextBuilder addText(boolean inlineMode) {
+        return new TextBuilder(this, inlineMode);
     }
 
     public TableBuilder addTable(float... columnWidths) {
@@ -115,6 +120,11 @@ public class DonPdf {
         return this;
     }
 
+    public DonPdf margins(float top, float right, float bottom, float left) {
+        this.config.setMargins(top, right, bottom, left);
+        return this;
+    }
+
     public DonPdf mergePdf(String pdfPath) {
         Objects.requireNonNull(pdfPath, "PDF path cannot be null");
         if (!new File(pdfPath).exists()) throw new IllegalArgumentException("PDF file does not exist: " + pdfPath);
@@ -134,6 +144,10 @@ public class DonPdf {
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf, config.getPageSize())
         ) {
+            document.setTopMargin(config.getMarginTop());
+            document.setRightMargin(config.getMarginRight());
+            document.setBottomMargin(config.getMarginBottom());
+            document.setLeftMargin(config.getMarginLeft());
             applyDocumentSettings(document);
             addElementsToDocument(document);
         }
@@ -152,8 +166,12 @@ public class DonPdf {
     private void createInitialDocument(String tempPath) throws IOException {
         try (PdfWriter writer = new PdfWriter(tempPath);
              PdfDocument pdf = new PdfDocument(writer);
-             Document document = new Document(pdf, config.getPageSize())) {
-
+             Document document = new Document(pdf, config.getPageSize())
+        ) {
+            document.setTopMargin(config.getMarginTop());
+            document.setRightMargin(config.getMarginRight());
+            document.setBottomMargin(config.getMarginBottom());
+            document.setLeftMargin(config.getMarginLeft());
             applyDocumentSettings(document);
             addElementsToDocument(document);
         }
@@ -161,8 +179,8 @@ public class DonPdf {
 
     private void mergeDocuments(String initialPath) throws IOException {
         try (PdfWriter writer = new PdfWriter(config.getOutputPath());
-             PdfDocument outputPdf = new PdfDocument(writer)) {
-
+             PdfDocument outputPdf = new PdfDocument(writer)
+        ) {
             mergePdfFile(initialPath, outputPdf);
             for (String mergePath : mergePaths) {
                 mergePdfFile(mergePath, outputPdf);
