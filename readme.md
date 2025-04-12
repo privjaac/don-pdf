@@ -1,6 +1,7 @@
 # DonPdf
 
-Una biblioteca simple para la creación de documentos PDF en Java.
+Una biblioteca simple para la creación de documentos PDF en Java,
+visítanos en nuestra [web](https://www.donpdf.com).
 
 ## Requisitos
 
@@ -9,8 +10,8 @@ Una biblioteca simple para la creación de documentos PDF en Java.
 
 ## Dependencias
 
-- iText Core 8.0.5
-- JavaCV Platform 1.5.11
+- iText Core
+- JavaCV Platform
 
 ## Características
 
@@ -25,7 +26,15 @@ Una biblioteca simple para la creación de documentos PDF en Java.
 Agrega la biblioteca como dependencia en tu proyecto:
 
 ```groovy
-implementation 'com.jaac.pdf:don-pdf:0.0.1'
+implementation 'com.donpdf.pdf:don-pdf:0.0.3'
+```
+
+```xml
+<dependency>
+  <groupId>com.donpdf.pdf</groupId>
+  <artifactId>don-pdf</artifactId>
+  <version>0.0.3</version>
+</dependency>
 ```
 
 ## Ejemplos
@@ -33,7 +42,7 @@ implementation 'com.jaac.pdf:don-pdf:0.0.1'
 ### Documento simple con texto
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class SimpleTextExample {
     public static void main(String[] args) {
@@ -52,7 +61,7 @@ public class SimpleTextExample {
 ### Texto con formato personalizado
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class FormattedTextExample {
     public static void main(String[] args) {
@@ -79,7 +88,7 @@ public class FormattedTextExample {
 ### Usar una fuente personalizada
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class CustomFontExample {
     public static void main(String[] args) {
@@ -103,7 +112,7 @@ public class CustomFontExample {
 ### Documento con fondo de color
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class ColorBackgroundExample {
     public static void main(String[] args) {
@@ -124,7 +133,7 @@ public class ColorBackgroundExample {
 ### Documento con imagen de fondo
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class ImageBackgroundExample {
     public static void main(String[] args) {
@@ -146,7 +155,7 @@ public class ImageBackgroundExample {
 ### Añadir una imagen
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 
 public class AddImageExample {
@@ -173,7 +182,7 @@ public class AddImageExample {
 ### Crear una tabla simple
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 
 public class SimpleTableExample {
@@ -231,8 +240,8 @@ public class SimpleTableExample {
 ### Generar tabla dinámicamente
 
 ```java
-import com.jaac.pdf.main.DonPdf;
-import com.jaac.pdf.builder.TableBuilder;
+import main.com.donpdf.pdf.DonPdf;
+import builder.com.donpdf.pdf.TableBuilder;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 
 import java.util.Arrays;
@@ -320,7 +329,7 @@ public class DynamicTableExample {
 ### Combinar múltiples PDFs
 
 ```java
-import com.jaac.pdf.main.DonPdf;
+import main.com.donpdf.pdf.DonPdf;
 
 public class MergePdfExample {
     public static void main(String[] args) {
@@ -359,8 +368,8 @@ public class MergePdfExample {
 
 ```java
 import com.jaac.pdf.builder.PdfBuilder;
-import com.jaac.pdf.builder.TableBuilder;
-import com.jaac.pdf.builder.RowBuilder;
+import builder.com.donpdf.pdf.TableBuilder;
+import builder.com.donpdf.pdf.RowBuilder;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.borders.SolidBorder;
