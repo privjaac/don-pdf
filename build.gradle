@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'java-library'
     id 'maven-publish'
     id "tech.medivh.plugin.publisher" version "1.2.1"
@@ -9,8 +8,6 @@ group = 'com.donpdf.pdf'
 version = '0.0.3'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
@@ -26,16 +23,20 @@ configurations {
 }
 
 dependencies {
-    api 'com.itextpdf:html2pdf:6.1.0'
-    api 'com.itextpdf:itext-core:9.1.0'
-    api 'org.bytedeco:javacv-platform:1.5.11'
-    implementation 'org.slf4j:slf4j-nop:1.7.36'
+    api('com.itextpdf:html2pdf:6.1.0') {
+        exclude group: "org.slf4j"
+    }
+    api('com.itextpdf:itext-core:9.1.0') {
+        exclude group: "org.slf4j"
+    }
+    api('org.bytedeco:javacv-platform:1.5.11') {
+        exclude group: "org.slf4j"
+    }
+    implementation 'org.slf4j:slf4j-simple:2.0.16'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
-configurations.implementation.extendsFrom(configurations.loggingX)
-
 
 test {
     useJUnitPlatform()
