@@ -137,10 +137,7 @@ class ImageBuilderTest {
                         .next()
                         .build()
         );
-        assertTrue(
-                exception.getMessage().contains("Error al cargar la imagen")
-                || exception.getMessage().contains("No se pudo encontrar el recurso")
-        );
+        assertTrue(exception.getMessage().contains("invalid/path/to/image.png"));
     }
 
     @Test
