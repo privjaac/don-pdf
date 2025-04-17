@@ -1,13 +1,5 @@
 package com.donpdf.pdf.main;
 
-import com.itextpdf.kernel.colors.DeviceRgb;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
 import com.donpdf.pdf.builder.ImageBuilder;
 import com.donpdf.pdf.builder.TableBuilder;
 import com.donpdf.pdf.builder.TextBuilder;
@@ -16,6 +8,14 @@ import com.donpdf.pdf.element.Element;
 import com.donpdf.pdf.loader.FontLoader;
 import com.donpdf.pdf.parser.ColorParser;
 import com.donpdf.pdf.utility.BackgroundUtility;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
 
 import java.io.File;
 import java.io.IOException;
@@ -97,13 +97,13 @@ public class DonPdf {
         return this;
     }
 
-    public DonPdf defaultFont(String fontPath) throws IOException {
+    public DonPdf defaultFont(String fontPath) {
         Objects.requireNonNull(fontPath, "Font path cannot be null");
         this.config.setDefaultFont(loadFont(fontPath));
         return this;
     }
 
-    public DonPdf defaultFont(String fontPath, String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) throws IOException {
+    public DonPdf defaultFont(String fontPath, String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) {
         Objects.requireNonNull(fontPath, "Font path cannot be null");
         Objects.requireNonNull(encoding, "Encoding cannot be null");
         Objects.requireNonNull(embeddingStrategy, "EmbeddingStrategy cannot be null");
@@ -128,10 +128,14 @@ public class DonPdf {
         return this;
     }
 
-    public void build() throws IOException {
-        config.validate();
-        if (mergePaths.isEmpty()) buildSingleDocument();
-        else buildMergedDocument();
+    public void build() {
+        try {
+            config.validate();
+            if (mergePaths.isEmpty()) buildSingleDocument();
+            else buildMergedDocument();
+        } catch (Exception e) {
+            throw new RuntimeException("Error building PDF document: " + e.getMessage(), e);
+        }
     }
 
     private void buildSingleDocument() throws IOException {
@@ -206,11 +210,11 @@ public class DonPdf {
         }
     }
 
-    private PdfFont loadFont(String fontPath) throws IOException {
+    private PdfFont loadFont(String fontPath) {
         return loadFont(fontPath, "Identity-H", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
     }
 
-    private PdfFont loadFont(String fontPath, String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) throws IOException {
+    private PdfFont loadFont(String fontPath, String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) {
         FontLoader loader = new FontLoader(fontPath);
         return loader.loadPdfFont(encoding, embeddingStrategy);
     }

@@ -1,5 +1,7 @@
 package com.donpdf.pdf.builder;
 
+import com.donpdf.pdf.loader.FontLoader;
+import com.donpdf.pdf.parser.ColorParser;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -9,10 +11,6 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.BorderRadius;
 import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.donpdf.pdf.loader.FontLoader;
-import com.donpdf.pdf.parser.ColorParser;
-
-import java.io.IOException;
 
 public class CellBuilder {
     private final RowBuilder parent;
@@ -45,12 +43,8 @@ public class CellBuilder {
     }
 
     public CellBuilder font(String fontPath) {
-        try {
-            FontLoader loader = new FontLoader(fontPath);
-            this.font = loader.loadPdfFont();
-        } catch (IOException e) {
-            throw new RuntimeException("Error loading font: " + fontPath, e);
-        }
+        FontLoader loader = new FontLoader(fontPath);
+        this.font = loader.loadPdfFont();
         return this;
     }
 

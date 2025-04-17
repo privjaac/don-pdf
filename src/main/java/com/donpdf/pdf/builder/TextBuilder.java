@@ -1,17 +1,16 @@
 package com.donpdf.pdf.builder;
 
-import com.itextpdf.kernel.colors.Color;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.donpdf.pdf.fragment.TextFragment;
 import com.donpdf.pdf.element.TextElement;
+import com.donpdf.pdf.fragment.TextFragment;
 import com.donpdf.pdf.loader.FontLoader;
 import com.donpdf.pdf.main.DonPdf;
 import com.donpdf.pdf.parser.ColorParser;
 import com.donpdf.pdf.property.TextProperty;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.properties.TextAlignment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,12 +66,8 @@ public class TextBuilder {
     }
 
     public TextBuilder font(String fontPath) {
-        try {
-            FontLoader loader = new FontLoader(fontPath);
-            this.currentFont = loader.loadPdfFont();
-        } catch (IOException e) {
-            throw new RuntimeException("Error loading font: " + fontPath, e);
-        }
+        FontLoader loader = new FontLoader(fontPath);
+        this.currentFont = loader.loadPdfFont();
         return this;
     }
 

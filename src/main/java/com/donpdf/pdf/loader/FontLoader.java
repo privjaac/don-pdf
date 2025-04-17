@@ -11,12 +11,20 @@ public class FontLoader extends ResourceLoader {
         super(path);
     }
 
-    public PdfFont loadPdfFont() throws IOException {
-        return loadPdfFont(PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+    public PdfFont loadPdfFont() {
+        try {
+            return loadPdfFont(PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load font: " + resourcePath, e);
+        }
     }
 
-    public PdfFont loadPdfFont(String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) throws IOException {
-        byte[] fontData = loadResource();
-        return PdfFontFactory.createFont(fontData, encoding, embeddingStrategy);
+    public PdfFont loadPdfFont(String encoding, PdfFontFactory.EmbeddingStrategy embeddingStrategy) {
+        try {
+            byte[] fontData = loadResource();
+            return PdfFontFactory.createFont(fontData, encoding, embeddingStrategy);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load font: " + resourcePath, e);
+        }
     }
 }
