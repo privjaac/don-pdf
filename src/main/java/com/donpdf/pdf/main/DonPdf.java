@@ -1,5 +1,6 @@
 package com.donpdf.pdf.main;
 
+import com.donpdf.pdf.builder.HtmlBuilder;
 import com.donpdf.pdf.builder.ImageBuilder;
 import com.donpdf.pdf.builder.TableBuilder;
 import com.donpdf.pdf.builder.TextBuilder;
@@ -57,6 +58,10 @@ public class DonPdf {
 
     public TableBuilder addTable(float... columnWidths) {
         return new TableBuilder(this, columnWidths);
+    }
+
+    public HtmlBuilder addHtml() {
+        return new HtmlBuilder(this, this.config.getOutputPath());
     }
 
     public List<Element> getElements() {
