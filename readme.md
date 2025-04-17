@@ -26,14 +26,14 @@ visítanos en nuestra [web](https://www.donpdf.com).
 Agrega la biblioteca como dependencia en tu proyecto:
 
 ```groovy
-implementation 'com.donpdf.pdf:don-pdf:0.0.3'
+implementation 'com.donpdf.pdf:don-pdf:0.0.4'
 ```
 
 ```xml
 <dependency>
   <groupId>com.donpdf.pdf</groupId>
   <artifactId>don-pdf</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 </dependency>
 ```
 
@@ -118,7 +118,7 @@ public class ColorBackgroundExample {
     public static void main(String[] args) {
         DonPdf.builder()
             .output("output/fondo-color.pdf")
-            .backgroundColor("LIGHTBLUE")
+            .backgroundColor("blue")
             .addText()
                 .content("Documento con fondo de color")
                 .fontSize(16)
@@ -175,6 +175,71 @@ public class AddImageExample {
                  .next()
              .build();
          System.out.println("PDF con imagen generado correctamente.");
+    }
+}
+```
+
+### Plantilla HTML/CSS a PDF
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte Financiero</title>
+  <style>....</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo-container">
+      LOGO
+    </div>
+    <div class="report-title">
+      <h1>REPORTE FINANCIERO</h1>
+      <p>Período: {{periodo_inicio}} - {{periodo_fin}}</p>
+      <p>Generado: {{fecha_generación}}</p>
+      <p>Referencia: {{número_referencia}}</p>
+    </div>
+  </div>
+  ...continuar con la platilla
+</div>
+```
+
+```java
+import com.donpdf.pdf.main.DonPdf;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Html {
+    public static void main(String[] args) throws Exception {
+        Map<String, String> template = new HashMap<>();
+        template.put("periodo_inicio", "2025-01");
+        template.put("periodo_fin", "2025-05");
+        template.put("fecha_generación", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        template.put("número_referencia", "943167");
+        template.put("cliente_nombre", "Lucho Gonzales");
+        template.put("cliente_numero", "987654321");
+        template.put("cuenta_principal", "Enrique Manuel");
+        template.put("tipo_cuenta", "Premium");
+        template.put("cliente_dirección", "Av. Lomas del Polar, Juan Belau");
+        template.put("cliente_telefono", "01 0164 46124");
+        template.put("saldo_actual", "$ 106.130.00");
+        template.put("saldo_cambio", "57");
+        template.put("ingresos_periodo", "$ 10.640.00");
+        template.put("ingresos_cambio", "34");
+        template.put("gastos_periodo", "$ 5.613.00");
+        template.put("gastos_cambio", "28");
+        DonPdf.builder()
+                .output("output/main.pdf")
+                .addHtml()
+                .path("html/main.html")
+                .template(template)
+                .build();
     }
 }
 ```
@@ -297,15 +362,15 @@ public class DynamicTableExample {
              .addCell()
                  .content("Nombre")
                  .alignmentCenter()
-                 .background("LIGHTGRAY")
+                 .background("gray")
              .addCell()
                  .content("Edad")
                  .alignmentCenter()
-                 .background("LIGHTGRAY")
+                 .background("gray")
              .addCell()
                  .content("Email")
                  .alignmentCenter()
-                 .background("LIGHTGRAY")
+                 .background("gray")
                  .endRow();
          // Añadir filas dinámicamente con un bucle for
          for (Person persona : personas) {
@@ -420,17 +485,17 @@ public class SalesReportExample {
                      .addCell()
                          .content("Producto")
                          .fontSize(12)
-                         .background("LIGHTGRAY")
+                         .background("gray")
                          .alignmentCenter()
                      .addCell()
                          .content("Cantidad")
                          .fontSize(12)
-                         .background("LIGHTGRAY")
+                         .background("gray")
                          .alignmentCenter()
                      .addCell()
                          .content("Precio Total")
                          .fontSize(12)
-                         .background("LIGHTGRAY")
+                         .background("gray")
                          .alignmentCenter()
                          .endRow()
                  // Generar filas de ventas dinámicamente
@@ -440,15 +505,15 @@ public class SalesReportExample {
                      .addCell()
                          .content("TOTAL")
                          .fontSize(12)
-                         .background("LIGHTBLUE")
+                         .background("blue")
                          .alignmentRight()
                      .addCell()
                          .content("")
-                         .background("LIGHTBLUE")
+                         .background("blue")
                      .addCell()
                          .content(String.format("$%.2f", totalAmount))
                          .fontSize(12)
-                         .background("LIGHTBLUE")
+                         .background("blue")
                          .alignmentRight()
                          .endRow()
                  .next()
