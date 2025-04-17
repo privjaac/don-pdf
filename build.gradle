@@ -1,13 +1,20 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id "tech.medivh.plugin.publisher" version "1.2.1"
 }
 
-group = 'com.jaac.pdf'
-version = '0.0.1'
+group = 'com.donpdf.pdf'
+version = '0.0.3'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 }
 
 repositories {
@@ -19,9 +26,11 @@ configurations {
 }
 
 dependencies {
-    implementation ('com.itextpdf:itext-core:8.0.5')
-    implementation 'org.bytedeco:javacv-platform:1.5.11'
-    loggingX 'org.slf4j:slf4j-nop:1.7.36'
+    api 'com.itextpdf:html2pdf:6.1.0'
+    api 'com.itextpdf:itext-core:9.1.0'
+    api 'org.bytedeco:javacv-platform:1.5.11'
+    implementation 'org.slf4j:slf4j-nop:1.7.36'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
